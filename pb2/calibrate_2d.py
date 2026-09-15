@@ -4,3 +4,5 @@
 # run calibration
 
 # print calibration parameters
+
+# save calibration parameters in files
