@@ -40,19 +40,23 @@ while not done:
 		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
 		# detect the left chessboard corners
-		ret, left_corners = cv2.findChessboardCorners(gray, (LEFT_GRID_COLS-1,LEFT_GRID_ROWS-1))
-
-		# add left object and image points
-		if ret:
-			objpoints.append(np.array(left_objp, dtype=np.float32))
-			imgpoints.append(left_corners)
+		left_found, left_corners = cv2.findChessboardCorners(
+			gray, (LEFT_GRID_COLS-1, LEFT_GRID_ROWS-1)
+		)
 
 		# detect the left chessboard corners
-		ret, right_corners = cv2.findChessboardCorners(gray, (RIGHT_GRID_COLS-1,RIGHT_GRID_ROWS-1))
+		right_found, right_corners = cv2.findChessboardCorners(
+			gray, (RIGHT_GRID_COLS-1, RIGHT_GRID_ROWS-1)
+		)
 
-		# add left object and image points
-		if ret:
-			objpoints.append(np.array(right_objp, dtype=np.float32))
+		if left_found and right_found:
+			objpoints.append(np.concatenate([left_objp, right_objp]))
+			imgpoints.append(np.concatenate([left_corners, right_corners]))
+		elif left_found:
+			objpoints.append(left_objp)
+			imgpoints.append(left_corners)
+		elif right_found:
+			objpoints.append(right_objp)
 			imgpoints.append(right_corners)
 
 	i += 1
