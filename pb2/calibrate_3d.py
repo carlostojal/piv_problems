@@ -25,6 +25,7 @@ left_objp = []
 right_objp = []
 objpoints = []
 imgpoints = []
+frame_indices = []
 
 left_objp = build_left_object_points(LEFT_GRID_ROWS, LEFT_GRID_COLS)
 right_objp = build_right_object_points(RIGHT_GRID_ROWS, RIGHT_GRID_COLS)
@@ -59,6 +60,10 @@ while not done:
 			objpoints.append(right_objp)
 			imgpoints.append(right_corners)
 
+
+		if left_found or right_found:
+			frame_indices.append(i)
+
 	i += 1
 
 cap.release()
@@ -73,4 +78,4 @@ ret, mtx, dist, rvecs, tvecs = local_calibration(
 print(f"K={mtx}")
 
 # save calibration parameters in files
-save_calibration("data/calib_3d", mtx, dist, rvecs, tvecs)
+save_calibration("data/calib_3d", mtx, dist, rvecs, tvecs, frame_indices)
