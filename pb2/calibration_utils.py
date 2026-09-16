@@ -10,14 +10,11 @@ def build_left_object_points(
     rows=4, cols=6, block_width=BLOCK_WIDTH, block_height=BLOCK_HEIGHT
 ):
     points = []
-    y = 0
-    z = rows * block_height
-    for _ in range(rows-1):
-        x = cols * block_width
-        for _ in range(cols-1):
-            points.append([x, y, z])
-            x -= block_width
-        z -= block_height
+    for row in range(rows - 1):
+        z = (row + 1) * block_height
+        for col in range(cols - 1):
+            x = (col + 2) * block_width
+            points.append([x, 0, z])
     return np.array(points, dtype=np.float32)
 
 
@@ -28,14 +25,11 @@ def build_right_object_points(
     block_height=BLOCK_HEIGHT,
 ):
     points = []
-    x = 0
-    z = rows * block_height
-    for _ in range(rows-1):
-        y = 2 * block_width
-        for _ in range(cols-1):
-            points.append([x, y, z])
-            y += block_width
-        z -= block_height
+    for row in range(rows - 1):
+        z = (rows - 1 - row) * block_height
+        for col in range(cols - 1):
+            y = (col + 2) * block_width
+            points.append([0, y, z])
     return np.array(points, dtype=np.float32)
 
 
