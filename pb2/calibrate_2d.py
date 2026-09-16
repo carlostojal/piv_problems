@@ -1,11 +1,13 @@
 import cv2
 import numpy as np
-from pathlib import Path
+
+from calibration_utils import (
+	build_left_object_points,
+	local_calibration,
+	save_calibration,
+)
 
 FRAME_STEP = 1
-BLOCK_WIDTH = 15.8
-BLOCK_HEIGHT = 9.6
-
 GRID_ROWS = 4
 GRID_COLS = 6
 
@@ -20,15 +22,7 @@ objp = []
 objpoints = []
 imgpoints = []
 
-# build left grid
-x = 0
-y = (GRID_COLS) * BLOCK_WIDTH
-z = (GRID_ROWS) * BLOCK_HEIGHT
-for z_idx in range(GRID_ROWS-1):
-	for y_idx in range(GRID_COLS-1):
-		objp.append([x, y, z])
-		y -= BLOCK_WIDTH
-	z -= BLOCK_HEIGHT
+objp = build_left_object_points(GRID_ROWS, GRID_COLS)
 
 print(f"{len(objp)} points")
 
@@ -55,25 +49,12 @@ cap.release()
 
 # run calibration
 height, width = gray.shape
-camera_matrix = np.array(
-	[[width, 0, width / 2], [0, width, height / 2], [0, 0, 1]],
-	dtype=np.float64,
-)
-ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(
-	objpoints,
-	imgpoints,
-	(width, height),
-	camera_matrix,
-	None,
-	flags=cv2.CALIB_USE_INTRINSIC_GUESS,
+ret, mtx, dist, rvecs, tvecs = local_calibration(
+	objpoints, imgpoints, (width, height)
 )
 
 # print calibration parameters
 print(f"K={mtx}")
 
 # save calibration parameters in files
-calibration_dir = Path("data/calib_2d")
-calibration_dir.mkdir(parents=True, exist_ok=True)
-np.save(calibration_dir / "camera_matrix.npy", mtx)
-np.save(calibration_dir / "rotation_vectors.npy", np.array(rvecs))
-np.save(calibration_dir / "translation_vectors.npy", np.array(tvecs))
+save_calibration("data/calib_2d", mtx, dist, rvecs, tvecs)
