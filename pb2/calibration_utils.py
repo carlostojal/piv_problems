@@ -57,13 +57,21 @@ def local_calibration(object_points, image_points, image_size):
     )
 
 
-def save_calibration(directory, camera_matrix, distortion, rotation_vectors, translation_vectors):
+def save_calibration(
+    directory,
+    camera_matrix,
+    distortion,
+    rotation_vectors,
+    translation_vectors,
+    frame_indices,
+):
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
     np.save(directory / "camera_matrix.npy", camera_matrix)
     np.save(directory / "distortion_coefficients.npy", distortion)
     np.save(directory / "rotation_vectors.npy", np.array(rotation_vectors))
     np.save(directory / "translation_vectors.npy", np.array(translation_vectors))
+    np.save(directory / "frame_indices.npy", np.array(frame_indices, dtype=np.int64))
 
 
 def load_calibration(directory):
@@ -73,4 +81,5 @@ def load_calibration(directory):
         np.load(directory / "distortion_coefficients.npy"),
         np.load(directory / "rotation_vectors.npy"),
         np.load(directory / "translation_vectors.npy"),
+        np.load(directory / "frame_indices.npy"),
     )
