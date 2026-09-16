@@ -8,7 +8,7 @@ from calibration_utils import (
 	save_calibration,
 )
 
-FRAME_STEP = 1
+FRAME_STEP = 60
 LEFT_GRID_ROWS = 4
 LEFT_GRID_COLS = 6
 RIGHT_GRID_ROWS = 4
@@ -30,6 +30,9 @@ frame_indices = []
 left_objp = build_left_object_points(LEFT_GRID_ROWS, LEFT_GRID_COLS)
 right_objp = build_right_object_points(RIGHT_GRID_ROWS, RIGHT_GRID_COLS)
 
+print(f"left points: {left_objp.shape}")
+print(f"right points: {right_objp.shape}")
+
 while not done:
 	ret, frame = cap.read()
 	if not ret:
@@ -40,14 +43,11 @@ while not done:
 
 		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-		# detect the left chessboard corners
 		left_found, left_corners = cv2.findChessboardCorners(
-			gray, (LEFT_GRID_COLS-1, LEFT_GRID_ROWS-1)
+			gray, (LEFT_GRID_COLS - 1, LEFT_GRID_ROWS - 1)
 		)
-
-		# detect the left chessboard corners
 		right_found, right_corners = cv2.findChessboardCorners(
-			gray, (RIGHT_GRID_COLS-1, RIGHT_GRID_ROWS-1)
+			gray, (RIGHT_GRID_COLS - 1, RIGHT_GRID_ROWS - 1)
 		)
 
 		if left_found and right_found:

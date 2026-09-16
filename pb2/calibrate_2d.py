@@ -7,7 +7,7 @@ from calibration_utils import (
 	save_calibration,
 )
 
-FRAME_STEP = 1
+FRAME_STEP = 60
 GRID_ROWS = 4
 GRID_COLS = 8
 
