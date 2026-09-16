@@ -1,2 +1,4 @@
 .venv
 data/lego_twogrids.mp4
+***.npy
+__pycache__
