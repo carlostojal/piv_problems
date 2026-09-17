@@ -8,7 +8,7 @@ from calibration_utils import (
 	save_calibration,
 )
 
-FRAME_STEP = 60
+FRAME_STEP = 1
 LEFT_GRID_ROWS = 4
 LEFT_GRID_COLS = 6
 RIGHT_GRID_ROWS = 4
