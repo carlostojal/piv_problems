@@ -42,6 +42,7 @@ while True:
 		found, corners = cv2.findChessboardCorners(gray, grid_size)
 		if found:
 			detections[board] = corners.reshape(-1, 2)
+			cv2.drawChessboardCorners(frame, grid_size, corners, found)
 
 	for name, (camera_matrix, distortion, rvecs, tvecs, _) in calibrations.items():
 		pose_index = pose_indices[name].get(frame_index)
