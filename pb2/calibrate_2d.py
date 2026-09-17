@@ -3,13 +3,14 @@ import numpy as np
 
 from calibration_utils import (
 	build_right_object_points,
+	build_left_object_points,
 	local_calibration,
 	save_calibration,
 )
 
-FRAME_STEP = 60
+FRAME_STEP = 1
 GRID_ROWS = 4
-GRID_COLS = 8
+GRID_COLS = 6
 
 # capture video
 cap = cv2.VideoCapture("data/lego_twogrids.mp4")
@@ -23,7 +24,7 @@ objpoints = []
 imgpoints = []
 frame_indices = []
 
-objp = build_right_object_points(GRID_ROWS, GRID_COLS)
+objp = build_left_object_points(GRID_ROWS, GRID_COLS)
 
 print(f"{len(objp)} points")
 
