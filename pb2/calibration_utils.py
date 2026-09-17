@@ -7,7 +7,10 @@ BLOCK_WIDTH = 15.8
 BLOCK_HEIGHT = 9.6
 
 def build_left_object_points(
-    rows=4, cols=6, block_width=BLOCK_WIDTH, block_height=BLOCK_HEIGHT
+    rows=4,
+    cols=6,
+    block_width=BLOCK_WIDTH,
+    block_height=BLOCK_HEIGHT,
 ):
     points = []
     for row in range(rows - 1):
