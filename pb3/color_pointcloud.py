@@ -99,6 +99,26 @@ def calib_cam1(points0, keypoints1):
 	P /= np.linalg.norm(P)
 	return P
 
+# Get K[R|t] from the P matrix, using QR factorization.
+def get_k_r_t_from_p(P):
+
+	# get the leading 3x3 P block
+	P0 = P[:3,:3]
+
+	Q_, R_ = np.linalg.qr(np.linalg.inv(P0));
+
+	# the rotation matrix is the inverse of the decomposed Q matrix
+	R = np.linalg.inv(Q_)
+
+	# the intrinsic matrix is the inverse of the decomposed R matrix
+	K = np.linalg.inv(R_)
+
+	# the translation vector is obtained by  multiplying the inverse of the intrinsic by the last column of P
+	t = np.linalg.inv(K) @ P[:,-1]
+
+	return K, R, t
+
+
 # Visualize the point cloud interatively.
 def render_pointcloud(pointcloud, colors):
 	pointcloud = np.asarray(pointcloud, dtype=float)
@@ -148,7 +168,15 @@ keypoints_3d = get_img0_3d_keypoints(depth_map, pts0, K)
 
 # calibrate camera 1 relative to camera 0's points
 P1 = calib_cam1(keypoints_3d, pts1)
-print(P1)
+print(f"P={P1}")
+
+# recover K[R|t]
+K1, R1, t1 = get_k_r_t_from_p(P1)
+print(f"K1={K1}")
+print(f"R1={R1}")
+print(f"t1={t1}")
+print(f"K[R|t]={K1 @ np.column_stack((R1,t1))}")
+
 
 pointcloud0, _ = backproject_img(img0, depth_map, K) # back-project whole image 0
 cam1_pixels = get_cam1_pixels_for_cam0_points(pointcloud0, P1) # get camera 0's points projected into camera 1
